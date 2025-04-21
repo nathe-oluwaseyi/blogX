@@ -1,0 +1,24 @@
+{% extends parent_template|default:"blog/base_blog.html" %}
+
+{% block title %}
+{{ block.super }} - {{ category.name|title }}
+{% endblock %}
+
+{% block content %}
+{% if category.post_set.all %}
+        <section>
+            <h3> {{ category.name }} is associated with the 
+                post{{ category.post_set.count|pluralize }} below</h3>
+
+                    <ul> 
+                        <!--list of post(s) related to category-->
+                        {% for post in category.post_set.all  %}
+                           <li><a href="{{ post.get_absolute_url }}">{{ post|title }}</a></li>
+                        {% endfor %}
+                    </ul>
+        </section>
+{% endif %}
+{% if not category.post_set.all %}
+    <p> {{ category.name }} is not related to any post. </p>
+{% endif %}
+{% endblock %}

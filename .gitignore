@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo 
+
+
+
+# IDE
+.vscode/
+.idea/
+
+
+# Log files
+*.log 
+*.out
+
+# OS-specific files
+Thumbs.db
+Desktop.ini
+
+# Virtual environment
+_env/
+
+
+# Environment variables
+.env
+*.env
