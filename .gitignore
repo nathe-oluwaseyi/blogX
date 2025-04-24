@@ -25,3 +25,7 @@ _env/
 # Environment variables
 .env
 *.env
+
+
+# Database
+db.sqlite3
