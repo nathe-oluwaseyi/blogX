@@ -7,7 +7,7 @@
 {% block content %}
 <div>
     <div>
-        <form action="{% url 'blog:create_category' %}" method="post">
+        <form action="{% url 'blog:category_create' %}" method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Create Category</button>

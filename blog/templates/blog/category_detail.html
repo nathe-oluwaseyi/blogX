@@ -17,8 +17,13 @@
                         {% endfor %}
                     </ul>
         </section>
+        <div>
+            <a href="{{ category.get_delete_url }}">Delete Category</a>
+            <a href="{{ category.get_update_url }}">Edit Category</a>
+        </div>
 {% endif %}
 {% if not category.post_set.all %}
-    <p> {{ category.name }} is not related to any post. </p>
+    <p><em><i> {{ category.name }}</em></i> is not related to any post. </p>
 {% endif %}
 {% endblock %}
+

@@ -9,9 +9,9 @@ class Post(models.Model):
     slug = models.SlugField(max_length=100, help_text='A label for URL config', unique_for_month='published_at')
     content = models.TextField()
     #author = models.ForeignKey("Author", on_delete=models.CASCADE, related_name="posts")
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField()
     category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
-    tags = models.ManyToManyField("Tag", blank=True, related_name="posts")
+    tags = models.ManyToManyField("Tag", related_name="posts")
     featured_image = models.ImageField(upload_to="post/", blank=True, null=True)
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,11 +23,6 @@ class Post(models.Model):
         ordering = ['-published_at', 'title']
         get_latest_by = 'published_at'
         
-    
-    '''def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super().save(*args, **kwargs)'''
 
     def __str__(self):
         return self.title
@@ -37,49 +32,46 @@ class Post(models.Model):
                        kwargs={'year': self.published_at.year,
                                'month': self.published_at.month,
                                'slug': self.slug})
+    
+    def get_update_url(self):
+        return reverse('blog:blog_update', 
+                       kwargs={'year': self.published_at.year,
+                               'month': self.published_at.month,
+                               'slug': self.slug})
+    
+    def get_delete_url(self):
+        return reverse('blog:blog_delete', 
+                       kwargs={'year': self.published_at.year,
+                               'month': self.published_at.month,
+                               'slug': self.slug})
         
-    
-    
-'''class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True, null=True)
-    profile_picture = models.ImageField(upload_to="authors/", blank=True, null=True)
-    website = models.URLField(blank=True, null=True)
-    joined_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.user.username'''
-    
     
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True)
     
     class Meta:
         ordering = ['name']
-
-    '''def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)'''
 
     def __str__(self):
         return self.name
     
     def get_absolute_url(self):
         return reverse('blog:blog_category_detail', kwargs={'slug': self.slug})
+    
+    def get_update_url(self):
+        return reverse('blog:category_update', kwargs={'slug': self.slug})
+    
+    def get_delete_url(self):
+        return reverse('blog:category_delete', kwargs={'slug': self.slug})
+    
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True)
     
     class Meta:
         ordering = ['name']
-
-    '''def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)'''
 
     def __str__(self):
         return self.name
@@ -87,6 +79,28 @@ class Tag(models.Model):
     def get_absolute_url(self):
         return reverse('blog:blog_tag_detail', kwargs={'slug': self.slug})
     
+    def get_update_url(self):
+        return reverse('blog:tag_update', kwargs={'slug': self.slug})
+    
+    def get_delete_url(self):
+        return reverse('blog:tag_delete', kwargs={'slug': self.slug})
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
     
 '''class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
@@ -107,3 +121,21 @@ class Tag(models.Model):
 
     def __str__(self):
         return f"Interactions for {self.post.title}" '''
+        
+        
+        
+'''class Author(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to="authors/", blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    joined_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username'''
+        
+        
+'''def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)'''

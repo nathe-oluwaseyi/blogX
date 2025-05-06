@@ -7,10 +7,17 @@
 
 {% block content %}
 <h2>Tag List</h2>
+<div>
+  <a href="{% url 'blog:tag_create' %}">Create New Tag</a>
+</div>
 <ul>
     {% for tag in tag_list %}
        <li>
         <a href="{{ tag.get_absolute_url }}">{{ tag.name|title }}</a>
+        <div>
+          <a href="{{ tag.get_update_url }}">Edit Tag</a>
+          <a href="{{ tag.get_delete_url }}"> Delete Tag</a>
+        </div>
        </li>
     {% empty %}
     <li><emp>There are currently no Tags available.</em></li>

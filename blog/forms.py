@@ -23,7 +23,11 @@ class CategoryForm(SlugCleanMixin, forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        #fields = '__all__'
+        exclude = ['views', 'read_time']
+
+    # field which input is not required
+    featured_image = forms.ImageField(required=False)
     
     def clean_slug(self):
         return self.cleaned_data['slug'].lower()

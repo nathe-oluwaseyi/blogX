@@ -6,11 +6,19 @@
 
 
 {% block content %}
+<div>
+    <li><a href="{% url 'blog:category_create' %}">Create New Category<a/></li>
+</div>
 <h2>Category List</h2>
 <ul>
     {% for category in category_list %}
        <li>
         <a href="{{ category.get_absolute_url }}">{{ category.name|title }}</a>
+        <div>
+            <a href="{{ category.get_update_url }}">Edit Category</a>
+            <a href="{{ category.get_delete_url }}">Delete Category</a>
+        </div>
+
        </li>
     {% empty %}
     <li><emp>There are currently no category available.</em></li>

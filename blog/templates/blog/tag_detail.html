@@ -12,6 +12,9 @@
                         <!--list of posts related to tag-->
                         {% for post in tag.posts.all  %}
                            <li><a href="{{ post.get_absolute_url }}">{{ post.title|title }}</a></li>
+                           <div>
+                            <a href="{{ post.get_update_url }}">Edit Tag</a> 
+                           </div>
                         {% endfor %}
                     </ul>
         </section>

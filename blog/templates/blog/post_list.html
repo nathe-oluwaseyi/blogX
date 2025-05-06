@@ -6,13 +6,23 @@
 
 
 {% block content %}
+<div>
+  <a href="{% url 'blog:post_create' %}">Create New Post</a>
+</div>
 {% for post in post_list %}
 <article>
   <header>
     <h2>
       <a href="{{ post.get_absolute_url }}">
         {{ post.title|title }}</a>
+        
     </h2>
+    
+    <div>
+      <a href="{{ post.get_update_url }}">Edit Post</a>
+      <a href="{{ post.get_delete_url }}">Delete Post</a>
+    </div>
+
     <p>
       Written on:
       <time datetime="{{ post.published_at|date:"Y-m-d H:i:s" }}">
