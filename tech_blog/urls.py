@@ -19,9 +19,11 @@ from django.urls import include, path
 
 from blog import urls as blog_urls
 from .views import redirect_root
+from contact import urls as contact_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include(blog_urls)),
     path('', redirect_root),
+    path('contact/', include(contact_urls)),
 ]

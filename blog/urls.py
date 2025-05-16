@@ -7,6 +7,7 @@ from .views import (
 )
 
 app_name = "blog"
+
 urlpatterns = [
     path("post/create/", PostCreate.as_view(), name="post_create"),
     path("post/<int:year>/<int:month>/<slug:slug>/update/", PostUpdate.as_view(), name="blog_update"),

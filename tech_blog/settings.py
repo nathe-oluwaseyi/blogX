@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     
     # My apps
     'blog',
+    'contact'
       
       
 ]
@@ -83,6 +84,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tech_blog.wsgi.application'
+
+
+# Email
+# https://docs.djangoproject.com/en/5.1/topics/email/
+
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+SERVER_EMAIL = config('SERVER_EMAIL')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+EMAIL_SUBJECT_PREFIX = config('EMAIL_SUBJECT_PREFIX')
+raw_managers = config('MANAGERS')
+name, email = raw_managers.split('|')
+MANAGERS = ((name, email),)
 
 
 # Database

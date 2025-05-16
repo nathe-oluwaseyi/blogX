@@ -1,0 +1,15 @@
+{% extends parent_template|default:"blog/base_blog.html" %}
+
+{% block title %}
+{{ block.super }} - Contact Us!
+{% endblock %}
+
+{% block content %}
+<div>
+    <form action="{% url 'contact:contact' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Contact Us!</button>
+    </form>
+</div>
+{% endblock %}
