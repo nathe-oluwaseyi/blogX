@@ -1,3 +1,4 @@
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import View
 
@@ -24,11 +25,37 @@ class PostDetail(View):
     
 
 class TagList(View):
+    paginate_by = 5 # divide into 5 items per page
     template_name = 'blog/tag_list.html'
+    page_kwarg = 'page'
     
     def get(self, request):
-        tag_list = Tag.objects.all()
-        context = {"tag_list": tag_list}
+        tags = Tag.objects.all()
+        paginator = Paginator(tags, self.paginate_by)
+        page_number = request.GET.get(self.page_kwarg)
+        try:
+            page = paginator.page(page_number)
+        except PageNotAnInteger:
+            page = paginator.page(1)
+        except EmptyPage:
+            page = paginator.page(paginator.num_pages)
+        if page.has_previous():
+            pkw = self.page_kwarg
+            n = page.previous_page_number()
+            prev_url = f'?{pkw}={n}'
+        else:
+            prev_url = None
+        if page.has_next():
+            pkw = self.page_kwarg
+            n = page.next_page_number()
+            next_url = f'?{pkw}={n}'
+        else:
+            next_url = None
+        context = {'is_paginated': page.has_other_pages(),
+                   'next_page_url': next_url,
+                   'paginator': paginator,
+                   'previous_page_url': prev_url,
+                   'tag_list': page,}
         return render(request, self.template_name, context)
     
 
