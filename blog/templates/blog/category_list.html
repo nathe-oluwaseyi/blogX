@@ -26,4 +26,17 @@
 
 </ul>
 
+{% if is_paginated %}
+    <ul>
+        <li>{{ category_list.number }} of {{ paginator.num_pages }}</li>
+        {% if previous_page_url %}
+            <li><a href="{{ previous_page_url }}">Previous</a></li>
+        {% endif %}
+
+        {% if next_page_url %}
+            <li><a href="{{ next_page_url }}">Next</a></li>
+        {% endif %}
+    </ul>
+{% endif %}
+
 {% endblock %}

@@ -69,11 +69,37 @@ class TagDetail(View):
     
     
 class CategoryList(View):
+    paginated_by = 5 # Divide into 5 items per page
     template_name = 'blog/category_list.html'
+    page_kwarg = 'page'
     
     def get(self, request):
-        category_list = Category.objects.all()
-        context = {"category_list": category_list}
+        category = Category.objects.all()
+        paginator = Paginator(category, self.paginated_by)
+        page_number = request.GET.get(self.page_kwarg)
+        try:
+            page = paginator.page(page_number)
+        except PageNotAnInteger:
+            page = paginator.page(1) # if page is None, set page to 1
+        except EmptyPage:
+            page = paginator.page(paginator.num_pages)
+        if page.has_previous():
+            pkw = self.page_kwarg
+            n = page.previous_page_number()
+            prev_url = f'?{pkw}={n}'
+        else:
+            prev_url = None
+        if page.has_next():
+            pkw = self.page_kwarg
+            n = page.next_page_number()
+            next_url = f'?{pkw}={n}'
+        else:
+            next_url = None
+        context = {"category_list": page,
+                   "is_paginated": page.has_other_pages(),
+                   "next_page_url": next_url,
+                   "paginator": paginator,
+                   "previous_page_url": prev_url}
         return render(request, self.template_name, context)
     
     
