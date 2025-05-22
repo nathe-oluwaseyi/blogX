@@ -4,6 +4,7 @@ from django.urls import path
 from .views import (
     CategoryCreate, CategoryDelete, CategoryDetail, CategoryList,  CategoryUpdate, PostDelete, PostDetail, 
     PostList, PostUpdate, TagCreate, TagDelete, TagDetail, TagList, TagUpdate, PostCreate,
+    PostPageList,
 )
 
 app_name = "blog"
@@ -13,6 +14,7 @@ urlpatterns = [
     path("post/<int:year>/<int:month>/<slug:slug>/update/", PostUpdate.as_view(), name="blog_update"),
     path("post/<int:year>/<int:month>/<slug:slug>/delete/", PostDelete.as_view(), name="blog_delete"),
     path("", PostList.as_view(), name="blog_post_list"),
+    path("<int:page_number>/", PostPageList.as_view(), name="blog_post_list" ),
     path("post/<int:year>/<int:month>/<slug:slug>/", PostDetail.as_view(), name="blog_post_detail"),
     path("tag/create/", TagCreate.as_view(), name="tag_create"),
     path("tag/<slug:slug>/update/", TagUpdate.as_view(), name="tag_update"),

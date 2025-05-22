@@ -1,5 +1,6 @@
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.views.generic import View
 
 from .models import Category, Post, Tag
@@ -69,13 +70,13 @@ class TagDetail(View):
     
     
 class CategoryList(View):
-    paginated_by = 5 # Divide into 5 items per page
+    paginate_by = 5 # Divide into 5 items per page
     template_name = 'blog/category_list.html'
     page_kwarg = 'page'
     
     def get(self, request):
         category = Category.objects.all()
-        paginator = Paginator(category, self.paginated_by)
+        paginator = Paginator(category, self.paginate_by)
         page_number = request.GET.get(self.page_kwarg)
         try:
             page = paginator.page(page_number)
@@ -235,3 +236,34 @@ class CategoryDelete(View):
         category = get_object_or_404(self.model, slug__iexact=slug)
         category.delete()
         return redirect('blog:category_list')
+
+
+class PostPageList(View):
+    paginate_by = 3
+    template_name = 'blog/post_list.html'
+    
+    def get(self, request, page_number):
+        posts = Post.objects.all()
+        paginator = Paginator(posts, self.paginate_by)
+        try:
+            page = paginator.page(page_number)
+        except PageNotAnInteger:
+            page = paginator.page(1) # if page is None set it to 1
+        except EmptyPage:
+            page = paginator.page(paginator.num_pages)
+        if page.has_previous():
+            prev_url = reverse('blog:blog_post_list', args=(page.previous_page_number(),))
+        else:
+            prev_url = None
+        if page.has_next():
+            next_url = reverse('blog:blog_post_list', args=(page.next_page_number(),))
+        else:
+            next_url = None
+        context = {
+            'is_paginated': page.has_other_pages(),
+            'next_page_url': next_url,
+            'paginator': paginator,
+            'previous_page_url': prev_url,
+            'post_list': page,
+        }
+        return render(request, self.template_name, context)
